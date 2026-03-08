@@ -1,0 +1,17 @@
+{
+  "name": "the-wooden-spoon",
+  "version": "1.0.0",
+  "description": "A food blog for testing recipe import, embedding, and AEO",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "ejs": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

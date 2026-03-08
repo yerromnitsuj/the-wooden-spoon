@@ -1,0 +1,70 @@
+<%- include('partials/head') %>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-title">The Wooden Spoon</h1>
+    <p class="hero-subtitle">Simple recipes, real stories, honest food</p>
+    <p class="hero-desc">Ten recipes I've cooked a hundred times each. Every recipe tested, tasted, and trusted.</p>
+  </div>
+</section>
+
+<!-- Recipe Grid -->
+<section class="recipes-section">
+  <div class="container">
+    <h2 class="section-title">Latest Recipes</h2>
+    <div class="recipe-grid">
+      <% recipes.forEach(function(recipe, i) { %>
+        <article class="recipe-card<%= i === 0 ? ' recipe-card--featured' : '' %>">
+          <a href="/recipes/<%= recipe.slug %>" class="recipe-card-link">
+            <div class="recipe-card-image" style="background-image: url('<%= recipe.image %>')">
+              <div class="recipe-card-overlay">
+                <span class="recipe-card-category"><%= recipe.recipeCuisine %></span>
+              </div>
+            </div>
+            <div class="recipe-card-content">
+              <h3 class="recipe-card-title"><%= recipe.name %></h3>
+              <p class="recipe-card-headline"><%= recipe.headline %></p>
+              <div class="recipe-card-meta">
+                <span><%= formatTime(recipe.totalTime) %></span>
+                <span class="sep">&middot;</span>
+                <span><%= recipe.difficulty %></span>
+                <span class="sep">&middot;</span>
+                <span><%= recipe.recipeYield %></span>
+              </div>
+            </div>
+          </a>
+        </article>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2 class="cta-title">New recipes every two weeks</h2>
+      <p class="cta-desc">No spam, no fluff. Just tested recipes with honest stories.</p>
+      <form class="cta-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed!'; this.querySelector('input').disabled=true;">
+        <input type="email" placeholder="your@email.com" class="cta-input" required>
+        <button type="submit" class="cta-button">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
+
+<%
+function formatTime(iso) {
+  if (!iso) return '';
+  var match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!match) return iso;
+  var h = match[1] ? parseInt(match[1]) : 0;
+  var m = match[2] ? parseInt(match[2]) : 0;
+  if (h && m) return h + 'h ' + m + 'min';
+  if (h) return h + 'h';
+  return m + ' min';
+}
+%>

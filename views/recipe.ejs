@@ -1,0 +1,204 @@
+<%- include('partials/head') %>
+
+<!-- JSON-LD Structured Data (Schema.org/Recipe) -->
+<script type="application/ld+json">
+<%- JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": recipe.name,
+  "image": recipe.image,
+  "author": {
+    "@type": "Person",
+    "name": "Sarah Chen",
+    "url": "https://the-wooden-spoon.onrender.com/about"
+  },
+  "datePublished": recipe.datePublished,
+  "description": recipe.description,
+  "prepTime": recipe.prepTime,
+  "cookTime": recipe.cookTime,
+  "totalTime": recipe.totalTime,
+  "recipeYield": recipe.recipeYield,
+  "recipeCategory": recipe.recipeCategory,
+  "recipeCuisine": recipe.recipeCuisine,
+  "keywords": recipe.keywords.join(', '),
+  "recipeIngredient": recipe.recipeIngredient.filter(function(ing) { return !ing.startsWith('---'); }),
+  "recipeInstructions": recipe.recipeInstructions.map(function(step, i) {
+    return {
+      "@type": "HowToStep",
+      "position": i + 1,
+      "text": step.text
+    };
+  }),
+  "nutrition": recipe.nutrition ? {
+    "@type": "NutritionInformation",
+    "calories": recipe.nutrition.calories + " calories",
+    "fatContent": recipe.nutrition.fatContent,
+    "proteinContent": recipe.nutrition.proteinContent,
+    "carbohydrateContent": recipe.nutrition.carbohydrateContent
+  } : undefined
+}, null, 2) %>
+</script>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <div class="container">
+    <a href="/">Home</a> &rsaquo; <span><%= recipe.name %></span>
+  </div>
+</div>
+
+<!-- Recipe Hero -->
+<article class="recipe-page">
+  <div class="container">
+    <header class="recipe-header">
+      <div class="recipe-header-meta">
+        <span class="recipe-cuisine-tag"><%= recipe.recipeCuisine %></span>
+        <span class="recipe-difficulty-tag"><%= recipe.difficulty %></span>
+      </div>
+      <h1 class="recipe-title"><%= recipe.name %></h1>
+      <p class="recipe-headline"><%= recipe.headline %></p>
+      <p class="recipe-description"><%= recipe.description %></p>
+
+      <div class="recipe-info-bar">
+        <div class="recipe-info-item">
+          <span class="recipe-info-label">Prep</span>
+          <span class="recipe-info-value"><%= formatTime(recipe.prepTime) %></span>
+        </div>
+        <div class="recipe-info-item">
+          <span class="recipe-info-label">Cook</span>
+          <span class="recipe-info-value"><%= formatTime(recipe.cookTime) %></span>
+        </div>
+        <div class="recipe-info-item">
+          <span class="recipe-info-label">Total</span>
+          <span class="recipe-info-value"><%= formatTime(recipe.totalTime) %></span>
+        </div>
+        <div class="recipe-info-item">
+          <span class="recipe-info-label">Servings</span>
+          <span class="recipe-info-value"><%= recipe.recipeYield %></span>
+        </div>
+      </div>
+
+      <div class="recipe-author">
+        <span>By <strong>Sarah Chen</strong></span>
+        <span class="sep">&middot;</span>
+        <time datetime="<%= recipe.datePublished %>"><%= formatDate(recipe.datePublished) %></time>
+      </div>
+    </header>
+
+    <!-- Recipe Image -->
+    <div class="recipe-hero-image">
+      <img src="<%= recipe.image %>" alt="<%= recipe.name %>" loading="lazy">
+    </div>
+
+    <!-- Story -->
+    <section class="recipe-story">
+      <% recipe.story.forEach(function(paragraph) { %>
+        <p><%= paragraph %></p>
+      <% }); %>
+    </section>
+
+    <!-- Recipe Card -->
+    <div class="recipe-card-full" id="recipe">
+      <h2 class="recipe-card-full-title"><%= recipe.name %></h2>
+
+      <!-- Ingredients -->
+      <div class="recipe-section">
+        <h3 class="recipe-section-title">Ingredients</h3>
+        <ul class="ingredients-list">
+          <% recipe.recipeIngredient.forEach(function(ing) { %>
+            <% if (ing.startsWith('---')) { %>
+              <li class="ingredient-header"><%= ing.replace(/---/g, '').trim() %></li>
+            <% } else { %>
+              <li class="ingredient-item">
+                <label>
+                  <input type="checkbox" class="ingredient-check">
+                  <span><%= ing %></span>
+                </label>
+              </li>
+            <% } %>
+          <% }); %>
+        </ul>
+      </div>
+
+      <!-- Instructions -->
+      <div class="recipe-section">
+        <h3 class="recipe-section-title">Instructions</h3>
+        <ol class="instructions-list">
+          <% recipe.recipeInstructions.forEach(function(step, i) { %>
+            <li class="instruction-step">
+              <span class="step-number"><%= i + 1 %></span>
+              <p><%= step.text %></p>
+            </li>
+          <% }); %>
+        </ol>
+      </div>
+
+      <!-- Nutrition -->
+      <% if (recipe.nutrition) { %>
+      <div class="recipe-section">
+        <h3 class="recipe-section-title">Nutrition (per serving)</h3>
+        <div class="nutrition-grid">
+          <div class="nutrition-item">
+            <span class="nutrition-value"><%= recipe.nutrition.calories %></span>
+            <span class="nutrition-label">Calories</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value"><%= recipe.nutrition.proteinContent %></span>
+            <span class="nutrition-label">Protein</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value"><%= recipe.nutrition.carbohydrateContent %></span>
+            <span class="nutrition-label">Carbs</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-value"><%= recipe.nutrition.fatContent %></span>
+            <span class="nutrition-label">Fat</span>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- More Recipes -->
+    <section class="more-recipes">
+      <h2 class="section-title">More Recipes</h2>
+      <div class="recipe-grid recipe-grid--small">
+        <% recipes.filter(function(r) { return r.slug !== recipe.slug; }).slice(0, 3).forEach(function(r) { %>
+          <article class="recipe-card">
+            <a href="/recipes/<%= r.slug %>" class="recipe-card-link">
+              <div class="recipe-card-image" style="background-image: url('<%= r.image %>')">
+                <div class="recipe-card-overlay">
+                  <span class="recipe-card-category"><%= r.recipeCuisine %></span>
+                </div>
+              </div>
+              <div class="recipe-card-content">
+                <h3 class="recipe-card-title"><%= r.name %></h3>
+                <p class="recipe-card-headline"><%= r.headline %></p>
+              </div>
+            </a>
+          </article>
+        <% }); %>
+      </div>
+    </section>
+  </div>
+</article>
+
+<%- include('partials/footer') %>
+
+<%
+function formatTime(iso) {
+  if (!iso) return '';
+  var match = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  if (!match) return iso;
+  var h = match[1] ? parseInt(match[1]) : 0;
+  var m = match[2] ? parseInt(match[2]) : 0;
+  if (h && m) return h + 'h ' + m + 'min';
+  if (h) return h + 'h';
+  return m + ' min';
+}
+
+function formatDate(dateStr) {
+  var d = new Date(dateStr + 'T00:00:00');
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  return months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+}
+%>
