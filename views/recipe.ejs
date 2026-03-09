@@ -158,6 +158,22 @@
       <% } %>
     </div>
 
+    <!-- Recipy Widget: Shop Ingredients -->
+    <%
+    var recipyIds = {
+      'crispy-honey-garlic-chicken-thighs': 2312,
+      'miso-glazed-salmon-bok-choy': 2313,
+      'brown-butter-banana-bread': 2314,
+      'shakshuka-with-feta': 2315
+    };
+    var recipyId = recipyIds[recipe.slug];
+    %>
+    <% if (recipyId) { %>
+    <section class="recipy-widget-section" style="margin: 2rem 0;">
+      <recipy-shop data-recipe-id="<%= recipyId %>" theme="auto"></recipy-shop>
+    </section>
+    <% } %>
+
     <!-- More Recipes -->
     <section class="more-recipes">
       <h2 class="section-title">More Recipes</h2>
