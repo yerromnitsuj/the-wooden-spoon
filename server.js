@@ -9,16 +9,22 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Force HTTPS for URL generation (Render proxy terminates SSL, so req.protocol is 'http')
+function getBaseUrl(req) {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  return `${protocol}://${req.get('host')}`;
+}
+
 // robots.txt
 app.get('/robots.txt', (req, res) => {
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = getBaseUrl(req);
   res.type('text/plain');
   res.send(`User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`);
 });
 
 // sitemap.xml
 app.get('/sitemap.xml', (req, res) => {
-  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const baseUrl = getBaseUrl(req);
   const today = new Date().toISOString().split('T')[0];
 
   const staticPages = [
@@ -57,18 +63,24 @@ app.get('/sitemap.xml', (req, res) => {
 
 // Home page
 app.get('/', (req, res) => {
+  const baseUrl = getBaseUrl(req);
   res.render('index', {
     title: 'The Wooden Spoon — Simple Recipes, Real Stories',
     recipes,
     currentPath: '/',
+    canonicalUrl: `${baseUrl}/`,
+    ogImage: recipes[0] ? recipes[0].image : undefined,
   });
 });
 
 // About page
 app.get('/about', (req, res) => {
+  const baseUrl = getBaseUrl(req);
   res.render('about', {
     title: 'About — The Wooden Spoon',
     currentPath: '/about',
+    metaDescription: 'Meet Sarah Chen, the home cook behind The Wooden Spoon. Tested recipes, honest stories, real food.',
+    canonicalUrl: `${baseUrl}/about`,
   });
 });
 
@@ -81,21 +93,27 @@ app.get('/recipes/:slug', (req, res) => {
       currentPath: req.path,
     });
   }
+  const baseUrl = getBaseUrl(req);
   res.render('recipe', {
     title: `${recipe.name} — The Wooden Spoon`,
     recipe,
     recipes,
     currentPath: req.path,
+    metaDescription: recipe.description,
+    ogType: 'article',
+    ogImage: recipe.image,
+    canonicalUrl: `${baseUrl}/recipes/${recipe.slug}`,
   });
 });
 
 // JSON-LD API endpoint (for programmatic access)
 app.get('/api/recipes', (req, res) => {
+  const baseUrl = getBaseUrl(req);
   res.json(recipes.map((r) => ({
     slug: r.slug,
     name: r.name,
     description: r.description,
-    url: `${req.protocol}://${req.get('host')}/recipes/${r.slug}`,
+    url: `${baseUrl}/recipes/${r.slug}`,
   })));
 });
 

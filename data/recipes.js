@@ -581,6 +581,59 @@ const recipes = [
       carbohydrateContent: '42g',
     },
   },
+
+  {
+    slug: 'spring-pea-asparagus-pasta-lemon-ricotta',
+    name: 'Spring Pea and Asparagus Pasta with Lemon Ricotta',
+    headline: 'The dish that makes me glad winter is over',
+    description:
+      'A bright, light pasta tossed with sauteed asparagus, sweet peas, and dollops of creamy lemon ricotta. Ready in 25 minutes and entirely vegetarian.',
+    datePublished: '2026-03-12',
+    image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&h=600&fit=crop&auto=format',
+    prepTime: 'PT10M',
+    cookTime: 'PT15M',
+    totalTime: 'PT25M',
+    recipeYield: '4 servings',
+    recipeCategory: 'Main Course',
+    recipeCuisine: 'Italian',
+    keywords: ['pasta', 'asparagus', 'spring', 'peas', 'ricotta', 'lemon', 'vegetarian', 'weeknight', 'quick dinner'],
+    difficulty: 'Easy',
+    story: [
+      "There is a week in early spring when asparagus shows up at the grocery store looking like it actually wants to be there. Not the sad, rubbery stalks from January that taste like they traveled across three continents in a shipping container, but the real thing: bright green, snappy, with that grassy sweetness that means winter is finally done.",
+      "This pasta exists because of that week. I made it for the first time on a Tuesday in March when I was tired of every heavy, braised, slow-cooked thing I'd been making since November. I wanted something that tasted like opening a window. The combination is almost embarrassingly simple: asparagus, peas, good pasta, and ricotta mixed with lemon zest until it's basically a cloud.",
+      "The trick that makes this work is the pasta water. You save a cup of that starchy liquid and use it to build a silky sauce that coats everything without any cream or butter. The ricotta goes on in big, cold dollops at the end so it stays light and fresh instead of melting into the pasta. It takes twenty-five minutes and it tastes like the first warm day of the year."
+    ],
+    recipeIngredient: [
+      '1 lb orecchiette or penne pasta',
+      '1 bunch asparagus (about 1 lb), tough ends trimmed, cut into 1-inch pieces',
+      '1 1/2 cups fresh or frozen peas',
+      '3 tablespoons extra-virgin olive oil',
+      '4 cloves garlic, thinly sliced',
+      '1/4 teaspoon red pepper flakes',
+      '1 cup whole-milk ricotta cheese',
+      '1 lemon, zested and juiced',
+      '1/2 cup freshly grated Pecorino Romano cheese',
+      '2 tablespoons fresh mint leaves, torn',
+      '2 tablespoons fresh basil leaves, torn',
+      '1 teaspoon kosher salt',
+      '1/2 teaspoon freshly ground black pepper',
+    ],
+    recipeInstructions: [
+      { text: 'Bring a large pot of well-salted water to a boil. Cook the pasta according to package directions until al dente. During the last 2 minutes of cooking, add the asparagus pieces and peas directly to the pasta water. Before draining, scoop out 1 cup of the starchy pasta water and set aside.' },
+      { text: 'While the pasta cooks, combine the ricotta, lemon zest, half the lemon juice, and a pinch of salt in a small bowl. Stir until smooth and set aside.' },
+      { text: 'Heat the olive oil in a large skillet over medium heat. Add the sliced garlic and red pepper flakes. Cook for about 1 minute, stirring often, until the garlic is just golden and fragrant. Do not let it brown.' },
+      { text: 'Drain the pasta, asparagus, and peas together. Add them to the skillet with the garlic oil. Toss to coat over medium heat.' },
+      { text: 'Add half the reserved pasta water and the remaining lemon juice. Toss vigorously for about 1 minute until a light, glossy sauce forms. Add more pasta water a splash at a time if the pasta looks dry.' },
+      { text: 'Remove from heat. Add the grated Pecorino and toss until melted and incorporated. Season with salt and pepper.' },
+      { text: 'Divide among shallow bowls. Drop generous spoonfuls of the lemon ricotta on top. Scatter with torn mint and basil. Finish with a drizzle of olive oil and serve immediately.' },
+    ],
+    nutrition: {
+      calories: '520',
+      fatContent: '18g',
+      proteinContent: '22g',
+      carbohydrateContent: '68g',
+    },
+  },
 ];
 
 module.exports = recipes;
