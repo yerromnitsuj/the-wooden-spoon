@@ -13,9 +13,21 @@
 <section class="recipes-section">
   <div class="container">
     <h2 class="section-title">Latest Recipes</h2>
+    <div class="category-filters">
+      <button class="category-filter active" data-category="all">All</button>
+      <%
+        var categories = [];
+        recipes.forEach(function(r) {
+          if (categories.indexOf(r.recipeCategory) === -1) categories.push(r.recipeCategory);
+        });
+        categories.forEach(function(cat) {
+      %>
+        <button class="category-filter" data-category="<%= cat %>"><%= cat %></button>
+      <% }); %>
+    </div>
     <div class="recipe-grid">
       <% recipes.forEach(function(recipe, i) { %>
-        <article class="recipe-card<%= i === 0 ? ' recipe-card--featured' : '' %>">
+        <article class="recipe-card<%= i === 0 ? ' recipe-card--featured' : '' %>" data-category="<%= recipe.recipeCategory %>">
           <a href="/recipes/<%= recipe.slug %>" class="recipe-card-link">
             <div class="recipe-card-image" style="background-image: url('<%= recipe.image %>')">
               <div class="recipe-card-overlay">
@@ -53,6 +65,28 @@
     </div>
   </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var filters = document.querySelectorAll('.category-filter');
+  var cards = document.querySelectorAll('.recipe-card');
+  filters.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      filters.forEach(function(f) { f.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-category');
+      cards.forEach(function(card, i) {
+        if (cat === 'all' || card.getAttribute('data-category') === cat) {
+          card.style.display = '';
+          card.classList.remove('recipe-card--featured');
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+});
+</script>
 
 <%- include('partials/footer') %>
 

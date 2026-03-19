@@ -61,15 +61,18 @@ app.get('/sitemap.xml', (req, res) => {
   res.send(xml);
 });
 
-// Home page
+// Home page — newest recipes first
 app.get('/', (req, res) => {
   const baseUrl = getBaseUrl(req);
+  const sortedRecipes = [...recipes].sort((a, b) =>
+    new Date(b.datePublished) - new Date(a.datePublished)
+  );
   res.render('index', {
     title: 'The Wooden Spoon — Simple Recipes, Real Stories',
-    recipes,
+    recipes: sortedRecipes,
     currentPath: '/',
     canonicalUrl: `${baseUrl}/`,
-    ogImage: recipes[0] ? recipes[0].image : undefined,
+    ogImage: sortedRecipes[0] ? sortedRecipes[0].image : undefined,
   });
 });
 
