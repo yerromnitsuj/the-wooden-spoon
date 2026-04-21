@@ -15,10 +15,12 @@ function getBaseUrl(req) {
   return `${protocol}://${req.get('host')}`;
 }
 
-// robots.txt
+// robots.txt — short TTL so fixes propagate quickly through Cloudflare's
+// edge cache. A stale `Disallow: /` previously sat at the edge for 31 days.
 app.get('/robots.txt', (req, res) => {
   const baseUrl = getBaseUrl(req);
   res.type('text/plain');
+  res.set('Cache-Control', 'public, max-age=300, s-maxage=300');
   res.send(`User-agent: *\nAllow: /\nSitemap: ${baseUrl}/sitemap.xml\n`);
 });
 
