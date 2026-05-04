@@ -1,3 +1,6 @@
 node_modules/
 .env
 .DS_Store
+
+# Local push helpers (do not commit)
+push.local.sh
